@@ -5,6 +5,7 @@ echo 'Server = http://ftp.kaist.ac.kr/ArchLinux/$repo/os/$arch' >/etc/pacman.d/m
 
 pacman -Syu --needed --noconfirm intel-ucode nvidia nvidia-utils nvidia-settings base-devel dhcpcd doas docker man-db man-pages openssh reflector xdg-user-dirs xdg-utils zsh
 
+echo "refresh mirrorlist ..."
 reflector -c KR -f 4 >>/etc/pacman.d/mirrorlist
 
 ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
@@ -24,22 +25,29 @@ echo $HOST >/etc/hostname
 
 echo root:7107 | chpasswd
 
-bootctl install
+ROOT=$(mount | grep "/ " | cut -d ' ' -f 1)
+if [ -d /efi ]; then
+	EFI=/efi
+else
+	EFI=/boot
+fi
+
+bootctl --path=$EFI install
 echo "default arch.conf
 console-mode max
-editor no" >/boot/loader/loader.conf
+editor no" >$EFI/loader/loader.conf
 
 echo "title   Arch Linux
 linux   /vmlinuz-linux
 initrd  /intel-ucode.img
 initrd  /initramfs-linux.img
-options root=PARTUUID=$(blkid -s PARTUUID -o value /dev/sda2) rw" >/boot/loader/entries/arch.conf
+options root=PARTUUID=$(blkid -s PARTUUID -o value $ROOT) rw" >$EFI/loader/entries/arch.conf
 
 echo "title   Arch Linux (fallback initramfs)
 linux   /vmlinuz-linux
 initrd  /intel-ucode.img
 initrd  /initramfs-linux-fallback.img
-options root=PARTUUID=$(blkid -s PARTUUID -o value /dev/sda2) rw" >/boot/loader/entries/arch-fallback.conf
+options root=PARTUUID=$(blkid -s PARTUUID -o value $ROOT) rw" >$EFI/loader/entries/arch-fallback.conf
 
 USERNAME=sloth
 useradd -m -s /usr/bin/zsh $USERNAME
@@ -47,4 +55,4 @@ echo $USERNAME:7107 | chpasswd
 
 echo "permit nopass keepenv $USERNAME" >/etc/doas.conf
 chown root:root /etc/doas.conf
-chown 0400 /etc/doas.conf
+chmod 0400 /etc/doas.conf
