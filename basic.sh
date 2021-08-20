@@ -52,5 +52,7 @@ echo "permit nopass keepenv $USERNAME" >/etc/doas.conf
 chown root:root /etc/doas.conf
 chmod 0400 /etc/doas.conf
 
+echo "$USERNAME ALL=(ALL) ALL" >/etc/sudoers.d/$USERNAME # for makepkg
+
 systemctl enable dhcpcd
 systemctl enable docker
