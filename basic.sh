@@ -26,28 +26,23 @@ echo $HOST >/etc/hostname
 echo root:7107 | chpasswd
 
 ROOT=$(mount | grep "/ " | cut -d ' ' -f 1)
-if [ -d /efi ]; then
-	EFI=/efi
-else
-	EFI=/boot
-fi
 
-bootctl --path=$EFI install
+bootctl install
 echo "default arch.conf
 console-mode max
-editor no" >$EFI/loader/loader.conf
+editor no" >/boot/loader/loader.conf
 
 echo "title   Arch Linux
 linux   /vmlinuz-linux
 initrd  /intel-ucode.img
 initrd  /initramfs-linux.img
-options root=PARTUUID=$(blkid -s PARTUUID -o value $ROOT) rw" >$EFI/loader/entries/arch.conf
+options root=PARTUUID=$(blkid -s PARTUUID -o value $ROOT) rw" >/boot/loader/entries/arch.conf
 
 echo "title   Arch Linux (fallback initramfs)
 linux   /vmlinuz-linux
 initrd  /intel-ucode.img
 initrd  /initramfs-linux-fallback.img
-options root=PARTUUID=$(blkid -s PARTUUID -o value $ROOT) rw" >$EFI/loader/entries/arch-fallback.conf
+options root=PARTUUID=$(blkid -s PARTUUID -o value $ROOT) rw" >/boot/loader/entries/arch-fallback.conf
 
 USERNAME=sloth
 useradd -m -s /usr/bin/zsh $USERNAME
