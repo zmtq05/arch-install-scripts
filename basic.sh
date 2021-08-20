@@ -45,7 +45,7 @@ initrd  /initramfs-linux-fallback.img
 options root=PARTUUID=$(blkid -s PARTUUID -o value $ROOT) rw" >/boot/loader/entries/arch-fallback.conf
 
 USERNAME=sloth
-useradd -m -s /usr/bin/zsh $USERNAME
+useradd -m -G docker -s /usr/bin/zsh $USERNAME
 echo $USERNAME:7107 | chpasswd
 
 echo "permit nopass keepenv $USERNAME" >/etc/doas.conf
