@@ -51,3 +51,6 @@ echo $USERNAME:7107 | chpasswd
 echo "permit nopass keepenv $USERNAME" >/etc/doas.conf
 chown root:root /etc/doas.conf
 chmod 0400 /etc/doas.conf
+
+systemctl enable dhcpcd
+systemctl enable docker
