@@ -3,7 +3,7 @@
 sed -i "33s/.//; 37cParallelDownloads = 20\nILoveCandy" /etc/pacman.conf
 echo 'Server = http://ftp.kaist.ac.kr/ArchLinux/$repo/os/$arch' >/etc/pacman.d/mirrorlist
 
-pacman -Syu --needed --noconfirm intel-ucode nvidia nvidia-utils nvidia-settings base-devel dhcpcd doas docker man-db man-pages openssh reflector xdg-user-dirs xdg-utils zsh
+pacman -Syu --needed --noconfirm intel-ucode nvidia nvidia-utils nvidia-settings base-devel dhcpcd doas man-db man-pages openssh reflector xdg-user-dirs xdg-utils zsh
 
 echo "refresh mirrorlist ..."
 reflector -c KR -f 4 >>/etc/pacman.d/mirrorlist
@@ -45,7 +45,7 @@ initrd  /initramfs-linux-fallback.img
 options root=PARTUUID=$(blkid -s PARTUUID -o value $ROOT) rw" >/boot/loader/entries/arch-fallback.conf
 
 USERNAME=sloth
-useradd -m -G docker -s /usr/bin/zsh $USERNAME
+useradd -m -s /usr/bin/zsh $USERNAME
 echo $USERNAME:7107 | chpasswd
 
 echo "permit nopass keepenv $USERNAME" >/etc/doas.conf
@@ -55,4 +55,3 @@ chmod 0400 /etc/doas.conf
 echo "$USERNAME ALL=(ALL) ALL" >/etc/sudoers.d/$USERNAME # for makepkg
 
 systemctl enable dhcpcd
-systemctl enable docker
