@@ -3,7 +3,7 @@
 sed -i "33s/.//; 37cParallelDownloads = 20\nILoveCandy" /etc/pacman.conf
 echo 'Server = http://ftp.kaist.ac.kr/ArchLinux/$repo/os/$arch' >/etc/pacman.d/mirrorlist
 
-pacman -Syu --needed --noconfirm intel-ucode nvidia nvidia-utils nvidia-settings base-devel dhcpcd doas man-db man-pages openssh reflector xdg-user-dirs xdg-utils zsh
+pacman -Syu --needed --noconfirm intel-ucode nvidia nvidia-utils nvidia-settings base-devel dhcpcd doas man-db man-pages openssh reflector xdg-utils zsh git github-cli bat ripgrep lsd tealdeer noto-fonts-emoji
 
 echo "refresh mirrorlist ..."
 reflector -c KR -f 4 >>/etc/pacman.d/mirrorlist
