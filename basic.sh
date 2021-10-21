@@ -9,7 +9,7 @@ sed -i "33s/.//; 37cParallelDownloads = 20\nILoveCandy" /etc/pacman.conf
 echo 'Server = http://ftp.kaist.ac.kr/ArchLinux/$repo/os/$arch' >/etc/pacman.d/mirrorlist
 
 # install packages
-pacman -Syu --needed --noconfirm intel-ucode nvidia nvidia-utils nvidia-settings base-devel dhcpcd doas man-db man-pages openssh reflector xdg-utils zsh git github-cli bat ripgrep lsd tealdeer noto-fonts-emoji
+pacman -Syu --needed --noconfirm intel-ucode nvidia nvidia-utils nvidia-settings base-devel doas man-db man-pages openssh reflector xdg-utils zsh git github-cli bat ripgrep lsd tealdeer noto-fonts-emoji
 
 # refresh mirrorlist
 echo "refresh mirrorlist ..."
@@ -69,6 +69,8 @@ chown root:root /etc/doas.conf
 chmod 0400 /etc/doas.conf
 
 # enable services
-systemctl enable dhcpcd
+systemctl enable systemd-networkd
+
+cp 20-wired.network /etc/systemd/network/20-wired.network
 
 echo "Reboot after umount."
